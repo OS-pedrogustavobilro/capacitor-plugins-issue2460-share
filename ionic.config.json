@@ -1,0 +1,7 @@
+{
+  "name": "capacitor-plugins-issue2460-share",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
