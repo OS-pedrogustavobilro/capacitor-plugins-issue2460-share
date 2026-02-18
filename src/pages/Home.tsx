@@ -119,19 +119,51 @@ const Home: React.FC = () => {
         directory: dir,
         path: fileName
       });
-      console.log('File length: ', statInfo.size);
 
+      console.log('=== File Diagnostics ===');
+      console.log('File name:', fileName);
       console.log('File URI:', uri);
-      console.log('vCard content:', vcardValue);
+      console.log('File size:', statInfo.size, 'bytes');
+      console.log('File type:', statInfo.type);
+      console.log('File mtime:', statInfo.mtime);
+      console.log('Directory:', dir);
+      console.log('=== vCard Content ===');
+      console.log(vcardValue);
+      console.log('=== Attempting Share ===');
 
       await Share.share({
         title: `${contact.firstName} ${contact.lastName}`.trim(),
         dialogTitle: 'Share contact',
         files: [uri]
       });
+
+      console.log('Share completed successfully');
     } catch (error) {
-      console.error('Error sharing contact:', error);
+      console.error('=== Share Error ===');
+      console.error('Error type:', typeof error);
+      console.error('Error details:', JSON.stringify(error, null, 2));
+      console.error('Error message:', error);
       alert(`Error: ${error}`);
+    }
+  };
+
+  const shareContactWithText = async (): Promise<void> => {
+    try {
+      const vcardValue = generateVCard(contact);
+
+      console.log('=== Sharing as text ===');
+      console.log('vCard content:', vcardValue);
+
+      await Share.share({
+        title: `${contact.firstName} ${contact.lastName}`.trim(),
+        text: vcardValue,
+        dialogTitle: 'Share contact (as text)'
+      });
+
+      console.log('Text share completed successfully');
+    } catch (error) {
+      console.error('Text share error:', error);
+      alert(`Text share error: ${error}`);
     }
   };
 
@@ -239,7 +271,24 @@ const Home: React.FC = () => {
             </IonList>
 
             <IonButton expand="block" onClick={shareContact} style={{ marginTop: '20px' }}>
-              Share vCard
+              Share vCard (as file)
+            </IonButton>
+
+            <IonButton expand="block" onClick={shareContactWithText} color="secondary" style={{ marginTop: '10px' }}>
+              Share vCard (as text)
+            </IonButton>
+
+            <IonButton
+              expand="block"
+              fill="outline"
+              onClick={() => {
+                const vcard = generateVCard(contact);
+                console.log('Generated vCard:', vcard);
+                alert('vCard copied to console. Check Xcode logs.');
+              }}
+              style={{ marginTop: '10px' }}
+            >
+              View vCard in Console
             </IonButton>
           </IonCardContent>
         </IonCard>
