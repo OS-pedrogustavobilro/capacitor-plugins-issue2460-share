@@ -271,7 +271,7 @@ const Home: React.FC = () => {
             </IonList>
 
             <IonButton expand="block" onClick={shareContact} style={{ marginTop: '20px' }}>
-              Share vCard (as file)
+              Share vCard (as file) - Has issue
             </IonButton>
 
             <IonButton expand="block" onClick={shareContactWithText} color="secondary" style={{ marginTop: '10px' }}>
